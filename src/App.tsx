@@ -7,7 +7,7 @@ function App() {
   // FIXME: I'm sure there's a better hook that this that doesn't require the `data-done` hack
   useEffect(() => {
     [...Array(8)].map(function(_, i) {
-      let id = `scramble-${i + 1}`
+      let id = `scramble-${i + 1}-front`
       let element = document.getElementById(id)
       // FIXME: Remove once found proper hook for "page loaded"
       if (element?.getAttribute('data-done') == 'true') { return }
@@ -17,6 +17,11 @@ function App() {
       SRVisualizer.cubePNG(element, { algorithm: algorithm })
       // FIXME: Remove once found proper hook for "page loaded"
       element?.setAttribute('data-done', 'true')
+
+      // The above only shows 3 faces, this is a quick way to show the top layer, to get a bit more confidence on the scramble.
+      // Another option would be to use the `viewportRotations` options, but I don't know how to use the libray's `Axis` type for it.
+      let topElement = document.getElementById(`scramble-${i + 1}-top`)
+      SRVisualizer.cubePNG(topElement, { algorithm: algorithm, view: 'plan' })
     })
   })
 
@@ -33,7 +38,8 @@ function App() {
         <div>
           <p>Scramble for {moves}-moves cross</p>
           <p>{scramble}</p>
-          <p id={imageNodeId} data-algorithm={scramble}></p>
+          <p className="inline-block" id={`${imageNodeId}-front`} data-algorithm={scramble}></p>
+          <p className="inline-block" id={`${imageNodeId}-top`} data-algorithm={scramble}></p>
         </div>
       )})}
 
