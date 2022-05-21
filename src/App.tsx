@@ -5,13 +5,15 @@ import getRandomSolve from 'rubiks-cross-trainer';
 function App() {
   return (
     <div>
-      <h1 className="text-3xl font-bold underline">
-        Hello world!
-    </h1>
+      <h1 className="text-3xl font-bold underline">Gio's Cross Trainer</h1>
 
-    <p>Scramble for a 1 move cross</p>
-    <p>{ getRandomSolve(1) }</p>
-  </div>
+      {[...Array(8)].map((x, i) =>
+        <div>
+          <p>Scramble for {i + 1}-moves cross</p>
+          <p>{ getRandomSolve(i + 1) }</p>
+        </div>
+      )}
+    </div>
   );
 }
 
