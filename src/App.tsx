@@ -13,6 +13,15 @@ function App() {
           <p>{ getRandomSolve(i + 1) }</p>
         </div>
       )}
+
+      <div>
+        <p>Notes:</p>
+        <ul>
+          <li>Any cross can be solved in 8 moves or less</li>
+          <li>To train with these scrambles you only need a solved cross, not a solved cube.</li>
+          <li>Reload the page for new scrambles</li>
+        </ul>
+      </div>
     </div>
   );
 }
