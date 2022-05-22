@@ -14,20 +14,15 @@ function App() {
 
       let algorithm = element?.getAttribute('data-algorithm')
 
-      SRVisualizer.cubePNG(element, { algorithm: algorithm })
+      SRVisualizer.cubePNG(element, { algorithm: algorithm, width: 400, height: 400 })
       // FIXME: Remove once found proper hook for "page loaded"
       element?.setAttribute('data-done', 'true')
-
-      // The above only shows 3 faces, this is a quick way to show the top layer, to get a bit more confidence on the scramble.
-      // Another option would be to use the `viewportRotations` options, but I don't know how to use the libray's `Axis` type for it.
-      let topElement = document.getElementById(`scramble-${i + 1}-top`)
-      SRVisualizer.cubePNG(topElement, { algorithm: algorithm, view: 'plan' })
     })
   })
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold underline">Gio's Cross Trainer</h1>
+    <div className="text-center">
+      <h1 className="text-3xl font-bold underline mb-8">Gio's Cross Trainer</h1>
 
       {[...Array(8)].map(function (_, i) {
         let moves = i + 1
