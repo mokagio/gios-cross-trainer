@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Cube, Solver } from 'freecube';
 import './App.css';
 import getRandomSolve from 'rubiks-cross-trainer';
 import * as SRVisualizer from 'sr-visualizer';
@@ -12,11 +13,34 @@ function App() {
       // FIXME: Remove once found proper hook for "page loaded"
       if (element?.getAttribute('data-done') == 'true') { return }
 
+      // FIXME: Cope with nullability
       let algorithm = element?.getAttribute('data-algorithm')
 
       SRVisualizer.cubePNG(element, { algorithm: algorithm, width: 400, height: 400 })
       // FIXME: Remove once found proper hook for "page loaded"
       element?.setAttribute('data-done', 'true')
+
+      const canvas = document.querySelector(`#scramble-${i + 1}-canvas`)
+      // free cube doesn't support R2, and the like so here's an hack to adjust
+      // the scramble to it
+      const moves = algorithm?.split(" ")
+        .flatMap(m => m == "R2" ? "R R" : m)
+        .flatMap(m => m == "L2" ? "L L" : m)
+        .flatMap(m => m == "U2" ? "U U" : m)
+        .flatMap(m => m == "D2" ? "D D" : m)
+        .flatMap(m => m == "F2" ? "F F" : m)
+        .flatMap(m => m == "B2" ? "B B" : m)
+        .join(" ")
+        .split(" ")
+      const cube = new Cube(canvas, moves)
+      cube.render(30, -45)
+      // cube.shuffle(20, true)
+      //
+      const solver = new Solver(cube)
+      // FIXME: No moves are given here. Plus, I tried it on the GitHub demo
+      // site and it does a terrible cross solution 🙄
+      console.log(solver.solveCross())
+      const s = solver.solve()
     })
   })
 
@@ -35,6 +59,7 @@ function App() {
           <p>{scramble}</p>
           <p className="inline-block" id={`${imageNodeId}-front`} data-algorithm={scramble}></p>
           <p className="inline-block" id={`${imageNodeId}-top`} data-algorithm={scramble}></p>
+          <canvas className="inline-block align-top" id={`${imageNodeId}-canvas`}></canvas>
         </div>
       )})}
 
